@@ -1,0 +1,89 @@
+<div class="stats-grid">
+  @for (s of stats; track s.label) {
+    <div class="card stat-card">
+      <div class="stat-head">
+        <div class="stat-icon">
+          <svg [lucideIcon]="s.icon" [size]="18" color="#4f6df5"></svg>
+        </div>
+        @if (s.live) {
+          <span class="live-badge">live</span>
+        }
+      </div>
+      <div>
+        <div class="mono stat-value">{{ s.value }}</div>
+        <div class="stat-label">{{ s.label }}</div>
+      </div>
+    </div>
+  }
+</div>
+
+<div class="main-grid">
+  <section class="card enrollments-card">
+    <div class="card-head">
+      <div>
+        <div class="card-title">Recent enrollments</div>
+        <div class="card-subtitle">Latest activity</div>
+      </div>
+      <a routerLink="/enrollments" class="view-all-link">View all →</a>
+    </div>
+    <div class="table-wrap">
+      <table class="enrollments-table">
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Course</th>
+            <th>Status</th>
+            <th class="th-right">Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of recentEnrollments; track r.student + r.course) {
+            <tr>
+              <td>
+                <div class="cell-person">
+                  <div class="avatar">{{ r.student.slice(0, 2).toUpperCase() }}</div>
+                  <span class="person-name">{{ r.student }}</span>
+                </div>
+              </td>
+              <td>{{ r.course }}</td>
+              <td><span [class]="r.badgeClass">{{ r.status }}</span></td>
+              <td class="mono th-right grade-cell">{{ r.grade }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="side-column">
+    <section class="card breakdown-card">
+      <div class="card-title">Students per department</div>
+      <div class="card-subtitle breakdown-subtitle">Live count, grouped from real student records</div>
+      @if (departmentBreakdown.length === 0) {
+        <div class="no-students">No students yet.</div>
+      } @else {
+        <div class="breakdown-list">
+          @for (d of departmentBreakdown; track d.name) {
+            <div>
+              <div class="breakdown-row">
+                <span class="breakdown-name">{{ d.name }}</span>
+                <span class="mono breakdown-count">{{ d.count }}</span>
+              </div>
+              <div class="breakdown-track">
+                <div [style.width.%]="d.pct" class="breakdown-fill"></div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+    <section class="card quick-links-card">
+      <div class="card-title quick-links-title">Quick links</div>
+      <div class="quick-links-list">
+        <a routerLink="/students" class="quick-link">→ Manage students</a>
+        <a routerLink="/departments" class="quick-link">→ Browse departments</a>
+        <a routerLink="/courses" class="quick-link">→ Browse courses</a>
+      </div>
+    </section>
+  </div>
+</div>

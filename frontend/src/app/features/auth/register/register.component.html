@@ -1,0 +1,70 @@
+<div class="auth-page">
+  <div data-auth-aside class="auth-aside">
+    <div class="aside-brand">
+      <div class="aside-logo">
+        <svg lucideGraduationCap [size]="20" color="#fff"></svg>
+      </div>
+      <div class="aside-brand-text">Student Management System</div>
+    </div>
+    <div>
+      <div class="aside-heading">
+        Create an account to start managing records.
+      </div>
+      <div class="aside-features">
+        @for (p of ['Pick "admin" to add, edit and delete records.', 'Pick "user" for a signed-in, read-only account.', 'You can always browse as a guest without an account.']; track p) {
+          <div class="aside-feature-row">
+            <div class="aside-feature-dot">
+              <svg lucideCheck [size]="11" color="#a7b6ff"></svg>
+            </div>
+            <span class="aside-feature-text">{{ p }}</span>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="mono aside-footer">NTI · MEAN Stack graduation project</div>
+  </div>
+
+  <div class="auth-form-wrap">
+    <div class="auth-form-inner">
+      <div class="auth-title">Create your account</div>
+      <div class="auth-subtitle">Takes less than a minute.</div>
+
+      @if (error) {
+        <div class="auth-error">
+          <svg lucideAlertCircle [size]="16" class="auth-error-icon"></svg>
+          <span class="auth-error-text">{{ error }}</span>
+        </div>
+      }
+
+      <div class="auth-fields">
+        <label class="field">
+          <span class="field-label">Full name</span>
+          <input type="text" placeholder="Mariam Adel" [(ngModel)]="name" name="name" />
+        </label>
+        <label class="field">
+          <span class="field-label">Email</span>
+          <input type="email" placeholder="name@nti.edu" [(ngModel)]="email" name="email" />
+        </label>
+        <label class="field">
+          <span class="field-label">Password</span>
+          <input type="password" placeholder="At least 6 characters" [(ngModel)]="password" name="password" />
+        </label>
+        <label class="field">
+          <span class="field-label">Account type</span>
+          <select [(ngModel)]="role" name="role">
+            <option value="user">User (read-only)</option>
+            <option value="admin">Admin (full access)</option>
+          </select>
+        </label>
+      </div>
+
+      <button class="btn btn-primary auth-submit" [disabled]="submitting" (click)="submit()">
+        {{ submitting ? 'Creating account…' : 'Create account' }}
+      </button>
+
+      <div class="auth-footer-text">
+        Already have an account? <a routerLink="/login" class="auth-footer-link">Sign in</a>
+      </div>
+    </div>
+  </div>
+</div>

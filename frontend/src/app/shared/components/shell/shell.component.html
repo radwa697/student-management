@@ -1,0 +1,96 @@
+<div class="flex min-h-screen items-stretch">
+
+  @if (sidebarOpen()) {
+    <div class="fixed inset-0 z-[65] bg-black/50 md:hidden" (click)="closeSidebar()"></div>
+  }
+
+  <aside
+    data-sidebar
+    class="flex flex-col flex-none fixed inset-y-0 left-0 z-[70] w-[250px] transition-transform duration-200 ease-out md:static md:z-auto md:w-[70px] lg:w-[252px] sidebar-surface"
+    [class]="sidebarOpen() ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+  >
+    <div
+      data-brand
+      class="flex items-center gap-3 justify-start md:justify-center lg:justify-start px-[22px] py-6 md:px-0 md:py-5 lg:px-[22px] lg:py-6 brand-border"
+    >
+      <div class="flex items-center justify-center flex-none rounded-[11px] brand-logo">
+        <svg lucideGraduationCap [size]="19" color="#fff"></svg>
+      </div>
+      <div data-brand-text class="block md:hidden lg:block">
+        <div class="brand-title">Student Management<br>System</div>
+      </div>
+    </div>
+    <nav class="flex flex-col gap-[3px] px-3 py-3.5">
+      @for (item of nav; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="nav-active"
+          [routerLinkActiveOptions]="{ exact: false }"
+          class="flex items-center gap-3 justify-start md:justify-center lg:justify-start rounded-[11px] px-3.5 py-2.5 md:px-0 md:py-3 lg:px-3.5 lg:py-2.5 nav-link"
+        >
+          <svg [lucideIcon]="item.icon" [size]="17" class="flex-none"></svg>
+          <span data-nav-label class="block md:hidden lg:block">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+    <div data-side-foot class="mt-auto px-5 py-4 block md:hidden lg:block side-foot-border">
+      <div class="side-foot-box">
+        @if (user) {
+          <div class="side-foot-title">Signed in as {{ user.role }}</div>
+          <div class="side-foot-sub">
+            @if (user.role === 'admin') { Full access — add, edit and delete are enabled. }
+            @else { View-only — sign in as admin to edit records. }
+          </div>
+        } @else {
+          <div class="side-foot-title">Browsing as guest</div>
+          <div class="side-foot-sub">Records are read-only until you sign in.</div>
+        }
+      </div>
+    </div>
+  </aside>
+
+  <div class="flex flex-1 min-w-0 flex-col">
+    <header
+      class="sticky top-0 z-20 flex h-[70px] flex-none items-center gap-2.5 md:gap-4 px-3.5 md:px-[26px] header-surface"
+    >
+      <button
+        data-hamburger
+        (click)="toggleSidebar()"
+        title="Menu"
+        class="md:hidden flex h-9 w-9 flex-none items-center justify-center rounded-[10px] hamburger-btn"
+      >
+        @if (sidebarOpen()) { <svg lucideX [size]="17"></svg> } @else { <svg lucideMenu [size]="17"></svg> }
+      </button>
+      <div class="min-w-0">
+        <div class="page-title">{{ pageTitle }}</div>
+        <div class="mono hidden sm:block page-subtitle">Student Management System</div>
+      </div>
+      <div class="flex-1"></div>
+
+      <button class="theme-toggle" (click)="theme.toggle()" [title]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'">
+        @if (theme.isDark()) { <svg lucideSun [size]="17"></svg> } @else { <svg lucideMoon [size]="17"></svg> }
+      </button>
+
+      @if (user) {
+        <div class="flex items-center gap-2.5 ps-4 profile-border">
+          <div class="flex h-[34px] w-[34px] flex-none items-center justify-center rounded-full profile-avatar">{{ initials }}</div>
+          <div data-profile-text class="hidden sm:block profile-text">
+            <div class="profile-name">{{ user.name }}</div>
+            <div class="profile-role">{{ user.role }}</div>
+          </div>
+          <button (click)="logout()" title="Sign out" class="flex h-8 w-8 flex-none items-center justify-center rounded-[9px] logout-btn">
+            <svg lucideLogOut [size]="16"></svg>
+          </button>
+        </div>
+      } @else {
+        <a routerLink="/login" class="btn btn-primary">Sign in</a>
+      }
+    </header>
+
+    <main class="flex flex-1 flex-col gap-5 px-3.5 py-4 pb-8 md:px-[26px] md:py-6 md:pb-10 main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
+
+<app-toast-container></app-toast-container>
